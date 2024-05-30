@@ -1,6 +1,7 @@
 import express from "express";
 import mongoose from "mongoose";
 import dotenv from "dotenv";
+import userRouter from "./routes/user.route.js";
 
 dotenv.config();
 
@@ -19,7 +20,4 @@ app.listen(30401, () => {
   console.log("Server is listening on 30401");
 });
 
-// app.get('/', (req, res) => {
-//   console.log('HELLO');
-//   res.statusCode(200).send('HELLO');
-// });
+app.use("/api/user", userRouter);
