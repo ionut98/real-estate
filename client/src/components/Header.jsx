@@ -1,5 +1,6 @@
 import { FaSearch } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
+import logo from '../assets/logo.png';
 
 export default function Header() {
   return (
@@ -7,8 +8,7 @@ export default function Header() {
       <div className="flex justify-between items-center w-full p-2">
         <Link to={'/'}>
           <h1 className="font-bold text-2xl flex flex-wrap">
-            <span className="text-blue-700">Realm</span>
-            <span className="text-gray-700">Estate</span>
+            <img src={logo} alt="logo" className="h-12" draggable={false} />
           </h1>
         </Link>
 
