@@ -2,6 +2,7 @@ import User from "../models/user.model.js";
 import bcryptjs from "bcryptjs";
 import { errorHandler } from "../utils/error.js";
 import jwt from "jsonwebtoken";
+import { generateRandomString } from "../utils/utils.js";
 
 export const signup = async (req, res, next) => {
   console.log(req.body);
@@ -43,6 +44,47 @@ export const login = async (req, res, next) => {
       .cookie("access_token", token, { httpOnly: true })
       .status(200)
       .json(userPublicData);
+  } catch (err) {
+    next(err);
+  }
+};
+
+export const google = async (req, res, next) => {
+  const { email, name, photo: avatar } = req.body;
+
+  try {
+    const foundUser = await User.findOne({ email });
+
+    if (foundUser) {
+      const token = jwt.sign({ id: foundUser._id }, process.env.JWT_SECRET);
+
+      const { password: userPass, ...userPublicData } = foundUser._doc;
+      res
+        .cookie("access_token", token, { httpOnly: true })
+        .status(200)
+        .json(userPublicData);
+    } else {
+      const username =
+        name.split(" ").join("").toLowerCase() + generateRandomString(4);
+      const password = generateRandomString() + generateRandomString();
+      const hashedPassword = bcryptjs.hashSync(password, 10);
+
+      const newUser = new User({
+        username,
+        password: hashedPassword,
+        email,
+        avatar,
+      });
+      await newUser.save();
+
+      const token = jwt.sign({ id: newUser._id }, process.env.JWT_SECRET);
+
+      const { password: userPass, ...userPublicData } = newUser._doc;
+      res
+        .cookie("access_token", token, { httpOnly: true })
+        .status(200)
+        .json(userPublicData);
+    }
   } catch (err) {
     next(err);
   }
