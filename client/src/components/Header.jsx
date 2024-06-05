@@ -51,6 +51,7 @@ export default function Header() {
                   src={user.avatar}
                   alt="profile-avatar"
                   className="rounded-full h-9 w-9 object-cover"
+                  referrerPolicy="no-referrer"
                 />
               </li>
             </Link>
