@@ -17,7 +17,9 @@ export default function OAuth() {
 
       const result = await signInWithPopup(auth, provider);
       console.log(result);
-      const { displayName: name, email, photoUrl: photo } = result.user;
+      const { displayName: name, email, photoURL: photo } = result.user;
+
+      console.log('IN HANDLE CLICK AVEM:', name, email, photo);
 
       const response = await fetch('/api/auth/google', {
         method: 'POST',
@@ -26,7 +28,9 @@ export default function OAuth() {
         },
         body: JSON.stringify({ name, email, photo }),
       });
-      const data = response.json();
+      const data = await response.json();
+
+      console.log(data, '<=== DATA DUPA OAUTH =================');
 
       dispatch(loginSuccess(data));
       navigate('/');
