@@ -74,12 +74,25 @@ export default function Profile() {
           onChange={handleFileChange}
         />
         <img
-          src={user.avatar}
+          src={formData.avatar || user.avatar}
           alt="profile-avatar"
           referrerPolicy="no-referrer"
           className="rounded-full h-24 w-24 object-cover cursor-pointer self-center mb-2"
           onClick={handleAvatarClick}
         />
+        <p className="text-sm self-center mb-2">
+          {fileUploadError ? (
+            <span className="text-red-700">
+              Error Image upload (image must be less than 2Mb)
+            </span>
+          ) : fileUploadProgress > 0 && fileUploadProgress < 100 ? (
+            <span className="text-gray-700">{`Uploading ${fileUploadProgress}%`}</span>
+          ) : fileUploadProgress === 100 ? (
+            <span className="text-green-700">Image successfully uploaded!</span>
+          ) : (
+            ''
+          )}
+        </p>
         <input
           type="text"
           placeholder="username"
