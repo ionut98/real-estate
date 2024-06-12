@@ -1,8 +1,8 @@
 import { Router } from "express";
-import userController from "../controllers/user.controller.js";
+import { updateUser } from "../controllers/user.controller.js";
 
 const userRouter = Router();
 
-userRouter.get("/", userController);
+userRouter.get("/update/:id", updateUser);
 
 export default userRouter;
