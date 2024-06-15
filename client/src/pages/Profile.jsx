@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import {
   getDownloadURL,
   getStorage,
@@ -8,6 +8,7 @@ import {
 } from 'firebase/storage';
 
 import { app } from '../firebase';
+import { updateFailure, updateStart } from '../redux/user/userSlice';
 
 export default function Profile() {
   const { currentUser: user } = useSelector((state) => state.user);
@@ -16,6 +17,7 @@ export default function Profile() {
   const [fileUploadProgress, setFileUploadProgress] = useState(0);
   const [fileUploadError, setFileUploadError] = useState('');
   const [formData, setFormData] = useState({});
+  const dispatch = useDispatch();
 
   const handleAvatarClick = () => {
     fileRef.current.click();
@@ -54,18 +56,52 @@ export default function Profile() {
       },
       async () => {
         const downloadUrl = await getDownloadURL(uploadTask.snapshot.ref);
-        setFormData((prevFormData) => ({
-          ...prevFormData,
+        setFormData((fd) => ({
+          ...fd,
           avatar: downloadUrl,
         }));
       }
     );
   };
 
+  const handleChangeInput = (event) => {
+    setFormData((fd) => ({
+      ...fd,
+      [event.target.id]: event.target.value,
+    }));
+  };
+
+  const handleSubmitForm = async (event) => {
+    event.preventDefault();
+
+    try {
+      dispatch(updateStart());
+
+      const response = await fetch(`/api/user/update/${user._id}`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData),
+      });
+
+      const data = await response.json();
+
+      if (data.success === false) {
+        dispatch(updateFailure(data.message));
+        return;
+      }
+
+      dispatch(updateSuccess(data));
+    } catch (error) {
+      dispatch(updateFailure(error.message));
+    }
+  };
+
   return (
     <div className="p-3 max-w-lg mx-auto">
       <h1 className="text-3xl font-semibold text-center my-7">Profile</h1>
-      <form className="flex flex-col gap-2">
+      <form onSubmit={handleSubmitForm} className="flex flex-col gap-2">
         <input
           type="file"
           hidden
@@ -74,7 +110,7 @@ export default function Profile() {
           onChange={handleFileChange}
         />
         <img
-          src={formData.avatar || user.avatar}
+          src={formData?.avatar || user.avatar}
           alt="profile-avatar"
           referrerPolicy="no-referrer"
           className="rounded-full h-24 w-24 object-cover cursor-pointer self-center mb-2"
@@ -94,19 +130,27 @@ export default function Profile() {
           )}
         </p>
         <input
+          id="username"
           type="text"
           placeholder="username"
           className="border text-md p-2 rounded-lg outline-none"
+          defaultValue={user.username}
+          onChange={handleChangeInput}
         />
         <input
+          id="email"
           type="email"
           placeholder="email"
           className="border text-md p-2 rounded-lg outline-none"
+          defaultValue={user.email}
+          onChange={handleChangeInput}
         />
         <input
+          id="password"
           type="password"
           placeholder="password"
           className="border text-md p-2 rounded-lg outline-none"
+          onChange={handleChangeInput}
         />
         <button className="bg-blue-700 rounded-lg p-2 my-2 text-blue-50 font-semibold uppercase hover:opacity-85 disabled:opacity-65">
           Update
