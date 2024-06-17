@@ -15,7 +15,11 @@ import {
 } from '../redux/user/userSlice';
 
 export default function Profile() {
-  const { currentUser: user } = useSelector((state) => state.user);
+  const {
+    currentUser: user,
+    isLoading,
+    error,
+  } = useSelector((state) => state.user);
   const fileRef = useRef(null);
   const [file, setFile] = useState(undefined);
   const [fileUploadProgress, setFileUploadProgress] = useState(0);
@@ -159,14 +163,18 @@ export default function Profile() {
           className="border text-md p-2 rounded-lg outline-none"
           onChange={handleChangeInput}
         />
-        <button className="bg-blue-700 rounded-lg p-2 my-2 text-blue-50 font-semibold uppercase hover:opacity-85 disabled:opacity-65">
-          Update
+        <button
+          disabled={isLoading}
+          className="bg-blue-700 rounded-lg p-2 my-2 text-blue-50 font-semibold uppercase hover:opacity-85 disabled:opacity-65"
+        >
+          {isLoading ? 'Loading...' : 'Update'}
         </button>
       </form>
       <div className="flex justify-between mt-4">
         <span className="text-red-700 cursor-pointer">Delete account</span>
         <span className="text-red-700 cursor-pointer">Sign out</span>
       </div>
+      {error && <p className="text-red-700 mt-4 text-center">{error}</p>}
     </div>
   );
 }

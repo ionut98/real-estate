@@ -83,7 +83,7 @@ export default function Login() {
           <span className="text-blue-700">Sign up</span>
         </Link>
       </div>
-      {error && <p className="text-red-700 mt-4">{error}</p>}
+      {error && <p className="text-red-700 mt-4 text-center">{error}</p>}
     </div>
   );
 }
