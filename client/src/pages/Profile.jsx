@@ -8,14 +8,18 @@ import {
 } from 'firebase/storage';
 
 import { app } from '../firebase';
-import { updateFailure, updateStart } from '../redux/user/userSlice';
+import {
+  updateFailure,
+  updateStart,
+  updateSuccess,
+} from '../redux/user/userSlice';
 
 export default function Profile() {
   const { currentUser: user } = useSelector((state) => state.user);
   const fileRef = useRef(null);
   const [file, setFile] = useState(undefined);
   const [fileUploadProgress, setFileUploadProgress] = useState(0);
-  const [fileUploadError, setFileUploadError] = useState('');
+  const [fileUploadError, setFileUploadError] = useState(false);
   const [formData, setFormData] = useState({});
   const dispatch = useDispatch();
 
@@ -46,6 +50,7 @@ export default function Profile() {
     uploadTask.on(
       'state_changed',
       (snapshot) => {
+        setFileUploadError(false);
         const progress =
           (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
         console.log('Upload is ' + progress + '% done');
@@ -91,6 +96,8 @@ export default function Profile() {
         dispatch(updateFailure(data.message));
         return;
       }
+
+      console.log(data, '<=== DACA E OK INTRA AICI CU DATA');
 
       dispatch(updateSuccess(data));
     } catch (error) {
