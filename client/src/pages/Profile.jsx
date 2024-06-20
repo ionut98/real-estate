@@ -12,6 +12,9 @@ import {
   deleteFailure,
   deleteStart,
   deleteSuccess,
+  loginFailure,
+  loginSuccess,
+  logoutStart,
   updateFailure,
   updateStart,
   updateSuccess,
@@ -137,6 +140,24 @@ export default function Profile() {
     }
   };
 
+  const handleLogOut = async () => {
+    try {
+      dispatch(logoutStart());
+
+      const response = await fetch('/api/auth/logout');
+
+      const data = await response.json();
+      if (data.success === false) {
+        dispatch(loginFailure(data.message));
+        return;
+      }
+
+      dispatch(loginSuccess());
+    } catch (error) {
+      dispatch(loginFailure(error.message));
+    }
+  };
+
   return (
     <div className="p-3 max-w-lg mx-auto">
       <h1 className="text-3xl font-semibold text-center my-7">Profile</h1>
@@ -206,7 +227,9 @@ export default function Profile() {
         >
           Delete account
         </span>
-        <span className="text-gray-700 cursor-pointer">Sign out</span>
+        <span onClick={handleLogOut} className="text-gray-700 cursor-pointer">
+          Log out
+        </span>
       </div>
       {error && <p className="text-red-700 mt-4 text-center">{error}</p>}
       {updatedSuccessfully && (
