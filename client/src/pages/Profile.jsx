@@ -25,6 +25,7 @@ export default function Profile() {
   const [fileUploadProgress, setFileUploadProgress] = useState(0);
   const [fileUploadError, setFileUploadError] = useState(false);
   const [formData, setFormData] = useState({});
+  const [updatedSuccessfully, setUpdatedSuccessfully] = useState(false);
   const dispatch = useDispatch();
 
   const handleAvatarClick = () => {
@@ -42,13 +43,14 @@ export default function Profile() {
   }, [file]);
 
   useEffect(() => {
-    console.log(formData, 'FORM DATA');
+    setUpdatedSuccessfully(false);
   }, [formData]);
 
   const handleFileUpload = async (file) => {
     const storage = getStorage(app);
     const fileName = new Date().getTime() + file.name;
     const storageRef = ref(storage, fileName);
+
     const uploadTask = uploadBytesResumable(storageRef, file);
 
     uploadTask.on(
@@ -61,6 +63,7 @@ export default function Profile() {
         setFileUploadProgress(Math.round(progress));
       },
       (error) => {
+        console.log(error, '<===== error la imagine upload');
         setFileUploadError(true);
       },
       async () => {
@@ -104,8 +107,11 @@ export default function Profile() {
       console.log(data, '<=== DACA E OK INTRA AICI CU DATA');
 
       dispatch(updateSuccess(data));
+      setUpdatedSuccessfully(true);
     } catch (error) {
       dispatch(updateFailure(error.message));
+    } finally {
+      setFileUploadProgress(0);
     }
   };
 
@@ -126,6 +132,7 @@ export default function Profile() {
           referrerPolicy="no-referrer"
           className="rounded-full h-24 w-24 object-cover cursor-pointer self-center mb-2"
           onClick={handleAvatarClick}
+          title="Change avatar"
         />
         <p className="text-sm self-center mb-2">
           {fileUploadError ? (
@@ -172,9 +179,14 @@ export default function Profile() {
       </form>
       <div className="flex justify-between mt-4">
         <span className="text-red-700 cursor-pointer">Delete account</span>
-        <span className="text-red-700 cursor-pointer">Sign out</span>
+        <span className="text-gray-700 cursor-pointer">Sign out</span>
       </div>
       {error && <p className="text-red-700 mt-4 text-center">{error}</p>}
+      {updatedSuccessfully && (
+        <p className="text-green-700 mt-4 text-center">
+          User updated successfully!
+        </p>
+      )}
     </div>
   );
 }
