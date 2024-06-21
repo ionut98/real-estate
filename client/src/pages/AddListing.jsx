@@ -1,6 +1,76 @@
-import React from 'react';
+import {
+  getDownloadURL,
+  getStorage,
+  ref,
+  uploadBytesResumable,
+} from 'firebase/storage';
+import { useState } from 'react';
+import { app } from '../firebase';
 
 export default function AddListing() {
+  const [files, setFiles] = useState([]);
+  const [formData, setFormData] = useState({
+    imageUrls: [],
+  });
+  const [imageUploadError, setImageUploadError] = useState(false);
+
+  const handleFileChange = (event) => {
+    setFiles(event.target.files);
+  };
+
+  const handleImageSubmit = () => {
+    if (files.length > 0 && formData.imageUrls.length + files.length < 7) {
+      const promises = [];
+
+      for (let i = 0; i < files.length; i++) {
+        const file = files[i];
+        promises.push(storeImage(file));
+      }
+
+      Promise.all(promises)
+        .then((urls) => {
+          setFormData((fd) => ({
+            ...fd,
+            imageUrls: fd.imageUrls.concat(urls),
+          }));
+          setImageUploadError(false);
+        })
+        .catch((err) => {
+          setImageUploadError('Image upload failed (2mb max size / image)');
+        });
+    } else {
+      setImageUploadError('You can only upload 6 images per listing');
+    }
+  };
+
+  console.log(formData, '<=== FD');
+
+  const storeImage = async (file) => {
+    return new Promise((resolve, reject) => {
+      const storage = getStorage(app);
+      const fileName = new Date().getTime() + file.name;
+      const storageRef = ref(storage, fileName);
+      const uploadTask = uploadBytesResumable(storageRef, file);
+
+      uploadTask.on(
+        'state_changed',
+        (snapshot) => {
+          const progress =
+            (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+          console.log('Upload is ' + progress + '% done');
+        },
+        (error) => {
+          reject(error);
+        },
+        () => {
+          getDownloadURL(uploadTask.snapshot.ref).then((downloadUrl) => {
+            resolve(downloadUrl);
+          });
+        }
+      );
+    });
+  };
+
   return (
     <main className="max-w-2xl mx-auto p-3">
       <h1 className="text-gray-700 text-3xl font-semibold text-center my-7">
@@ -134,14 +204,31 @@ export default function AddListing() {
               accept="image/*"
               className="p-2 border border-gray-300 rounded-lg outline-none cursor-pointer w-full"
               multiple
+              onChange={handleFileChange}
             />
             <button
-              disabled
+              type="button"
               className="p-2 font-semibold text-blue-700 rounded-lg border border-blue-700 uppercase hover:shadow-lg disabled:opacity-65 cursor-pointer"
+              onClick={handleImageSubmit}
             >
               Upload
             </button>
           </div>
+          {imageUploadError && (
+            <p className="text-red-500 text-sm font-normal">
+              {imageUploadError}
+            </p>
+          )}
+          {formData.imageUrls.length > 0 &&
+            formData.imageUrls.map((url, index) => (
+              <div className="">
+                <img
+                  key={index}
+                  src={url}
+                  className="w-20 h-20 rounded-lg object-contain"
+                />
+              </div>
+            ))}
           <button className="text-gray-50 bg-gray-700 p-2 rounded-lg font-semibold uppercase my-4">
             Add Listing
           </button>
