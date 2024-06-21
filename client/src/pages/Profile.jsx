@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 import {
   getDownloadURL,
   getStorage,
@@ -33,6 +34,7 @@ export default function Profile() {
   const [formData, setFormData] = useState({});
   const [updatedSuccessfully, setUpdatedSuccessfully] = useState(false);
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const handleAvatarClick = () => {
     fileRef.current.click();
@@ -158,9 +160,16 @@ export default function Profile() {
     }
   };
 
+  const handleAddListing = (ev) => {
+    ev.preventDefault();
+    navigate('/add-listing');
+  };
+
   return (
     <div className="p-3 max-w-lg mx-auto">
-      <h1 className="text-3xl font-semibold text-center my-7">Profile</h1>
+      <h1 className="text-gray-700 text-3xl font-semibold text-center my-7">
+        Profile
+      </h1>
       <form onSubmit={handleSubmitForm} className="flex flex-col gap-2">
         <input
           type="file"
@@ -218,6 +227,13 @@ export default function Profile() {
           className="bg-blue-700 rounded-lg p-2 my-2 text-blue-50 font-semibold uppercase hover:opacity-85 disabled:opacity-65"
         >
           {isLoading ? 'Loading...' : 'Update'}
+        </button>
+        <button
+          disabled={isLoading}
+          onClick={handleAddListing}
+          className="bg-gray-700 rounded-lg p-2 text-blue-50 font-semibold uppercase hover:opacity-85 disabled:opacity-65"
+        >
+          Add Listing
         </button>
       </form>
       <div className="flex justify-between mt-4">

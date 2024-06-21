@@ -14,7 +14,12 @@ export default function Header() {
       <div className="flex justify-between items-center w-full p-2 px-3">
         <Link to={'/'}>
           <h1 className="font-bold text-2xl flex flex-wrap">
-            <img src={logo} alt="logo" className="h-12" draggable={false} />
+            <img
+              src={logo}
+              alt="logo"
+              className="h-8 sm:h-10"
+              draggable={false}
+            />
           </h1>
         </Link>
 
