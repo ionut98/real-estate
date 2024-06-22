@@ -387,7 +387,7 @@ export default function AddListing() {
             disabled={loading || uploading}
             className="text-gray-50 bg-gray-700 p-2 rounded-lg font-semibold uppercase my-4"
           >
-            {loading ? 'Adding' : 'Add Listing'}
+            {loading ? 'Adding...' : 'Add Listing'}
           </button>
           {error && <p className="text-red-500 text-sm font-normal">{error}</p>}
         </div>
