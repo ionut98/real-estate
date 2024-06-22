@@ -197,7 +197,7 @@ export default function AddListing() {
   };
 
   return (
-    <main className="max-w-2xl mx-auto">
+    <main className="max-w-2xl mx-auto px-3">
       <h1 className="text-gray-700 text-3xl font-semibold text-center my-7">
         Update Listing
       </h1>

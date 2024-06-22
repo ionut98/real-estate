@@ -189,7 +189,7 @@ export default function Profile() {
   };
 
   const handleClickListing = (listingId) => {
-    navigate(`/listings/${listingId}`);
+    navigate(`/listing/${listingId}`);
   };
 
   const handleDeleteListing = async (listingId) => {
@@ -217,7 +217,7 @@ export default function Profile() {
   };
 
   return (
-    <div className="max-w-lg mx-auto">
+    <div className="max-w-lg mx-auto px-3">
       <h1 className="text-gray-700 text-3xl font-semibold text-center my-7">
         Profile
       </h1>
