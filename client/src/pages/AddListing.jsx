@@ -13,6 +13,7 @@ export default function AddListing() {
     imageUrls: [],
   });
   const [imageUploadError, setImageUploadError] = useState(false);
+  const [uploading, setUploading] = useState(false);
 
   const handleFileChange = (event) => {
     setFiles(event.target.files);
@@ -27,6 +28,8 @@ export default function AddListing() {
         promises.push(storeImage(file));
       }
 
+      setUploading(true);
+
       Promise.all(promises)
         .then((urls) => {
           setFormData((fd) => ({
@@ -34,12 +37,15 @@ export default function AddListing() {
             imageUrls: fd.imageUrls.concat(urls),
           }));
           setImageUploadError(false);
+          setUploading(false);
         })
         .catch((err) => {
           setImageUploadError('Image upload failed (2mb max size / image)');
+          setUploading(false);
         });
     } else {
       setImageUploadError('You can only upload 6 images per listing');
+      setUploading(false);
     }
   };
 
@@ -69,6 +75,13 @@ export default function AddListing() {
         }
       );
     });
+  };
+
+  const handleDeleteUploadedImage = (index) => {
+    setFormData((fd) => ({
+      ...fd,
+      imageUrls: fd.imageUrls.filter((_, i) => i !== index),
+    }));
   };
 
   return (
@@ -102,7 +115,7 @@ export default function AddListing() {
             id="address"
             required
           />
-          <div className="flex gap-4 flex-wrap p-1 my-2">
+          <div className="flex gap-4 flex-wrap p-1 my-1">
             <div className="flex gap-2">
               <input type="checkbox" id="sell" className="w-5 cursor-pointer" />
               <span>Sell</span>
@@ -160,7 +173,7 @@ export default function AddListing() {
                 <p>Baths</p>
               </div>
             </div>
-            <div className="flex flex-row flex-wrap gap-4 my-2">
+            <div className="flex flex-row flex-wrap gap-4 my-1">
               <div className="flex items-center gap-2">
                 <input
                   type="number"
@@ -208,10 +221,10 @@ export default function AddListing() {
             />
             <button
               type="button"
-              className="p-2 font-semibold text-blue-700 rounded-lg border border-blue-700 uppercase hover:shadow-lg disabled:opacity-65 cursor-pointer"
+              className="p-2 font-semibold text-blue-700 rounded-lg border border-blue-700 uppercase hover:shadow-md disabled:opacity-65 cursor-pointer"
               onClick={handleImageSubmit}
             >
-              Upload
+              {uploading ? 'Uploading...' : 'Upload'}
             </button>
           </div>
           {imageUploadError && (
@@ -221,12 +234,22 @@ export default function AddListing() {
           )}
           {formData.imageUrls.length > 0 &&
             formData.imageUrls.map((url, index) => (
-              <div className="">
+              <div
+                key={index}
+                className="flex justify-between p-2 border border-gray-300 rounded-lg items-center"
+              >
                 <img
-                  key={index}
                   src={url}
-                  className="w-20 h-20 rounded-lg object-contain"
+                  alt="listing image"
+                  className="w-20 h-12 rounded-lg object-contain"
                 />
+                <button
+                  type="button"
+                  onClick={() => handleDeleteUploadedImage(index)}
+                  className="p-2 border border-red-700 text-red-700 rounded-lg uppercase hover:shadow-md"
+                >
+                  Delete
+                </button>
               </div>
             ))}
           <button className="text-gray-50 bg-gray-700 p-2 rounded-lg font-semibold uppercase my-4">
