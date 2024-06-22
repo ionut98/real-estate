@@ -212,6 +212,10 @@ export default function Profile() {
     }
   };
 
+  const handleEditListing = (listingId) => {
+    navigate(`/update-listing/${listingId}`);
+  };
+
   return (
     <div className="max-w-lg mx-auto">
       <h1 className="text-gray-700 text-3xl font-semibold text-center my-7">
@@ -340,7 +344,10 @@ export default function Profile() {
                 >
                   Delete
                 </button>
-                <button className="p-2 uppercase border rounded-lg border-blue-700 text-blue-700 hover:shadow-md">
+                <button
+                  onClick={() => handleEditListing(listing._id)}
+                  className="p-2 uppercase border rounded-lg border-blue-700 text-blue-700 hover:shadow-md"
+                >
                   Edit
                 </button>
               </div>
