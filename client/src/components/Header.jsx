@@ -1,4 +1,5 @@
-import { Link } from 'react-router-dom';
+import { useEffect, useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { FaSearch } from 'react-icons/fa';
 
@@ -6,8 +7,38 @@ import logo from '../assets/logo.png';
 
 export default function Header() {
   const { currentUser: user } = useSelector((state) => state.user);
+  const [searchTerm, setSearchTerm] = useState('');
+  const navigate = useNavigate();
 
   console.log(user, '<=== USER');
+
+  const handleSearchChange = (event) => {
+    setSearchTerm(event.target.value);
+  };
+
+  const handleSearchSubmit = (event) => {
+    event.preventDefault();
+
+    const urlParams = new URLSearchParams(location.search);
+
+    if (!searchTerm && urlParams.has('searchTerm')) {
+      urlParams.delete('searchTerm');
+    } else {
+      urlParams.set('searchTerm', searchTerm);
+    }
+
+    const searchQuery = urlParams.toString();
+    navigate(`/search?${searchQuery}`);
+  };
+
+  useEffect(() => {
+    const urlParams = new URLSearchParams(location.search);
+    const searchTermFromUrl = urlParams.get('searchTerm');
+
+    if (searchTermFromUrl) {
+      setSearchTerm(searchTermFromUrl);
+    }
+  }, [location.search]);
 
   return (
     <header className="bg-blue-50 shadow-sm">
@@ -23,13 +54,21 @@ export default function Header() {
           </h1>
         </Link>
 
-        <form className="bg-white py-2 px-3 rounded-lg flex flex-wrap items-center">
+        <form
+          onSubmit={handleSearchSubmit}
+          className="bg-white py-2 px-3 rounded-lg flex flex-wrap items-center"
+        >
           <input
             type="text"
             className="bg-transparent focus:outline-none w-32 sm:w-64 md:w-72 lg:w-96"
             placeholder="Search"
+            value={searchTerm}
+            onChange={handleSearchChange}
           />
-          <FaSearch className="text-gray-700" />
+          <FaSearch
+            onClick={handleSearchSubmit}
+            className="text-gray-700 cursor-pointer"
+          />
         </form>
 
         <ul className="flex gap-4 items-center">
