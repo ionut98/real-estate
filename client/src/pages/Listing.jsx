@@ -137,23 +137,23 @@ export default function Listing() {
             {listingDetails.description}
           </p>
           <ul className="text-blue-700 font-semibold text-sm flex gap-4 flex-wrap">
-            <li className="flex items-center gap-1 whitespace-nowrap">
+            <li className="flex items-center gap-1 border border-blue-700 px-2 py-1 rounded-xl whitespace-nowrap">
               <FaBed className="text-md" />
               {listingDetails.bedrooms > 1
                 ? `${listingDetails.bedrooms} bedrooms`
                 : `${listingDetails.bedrooms} bedroom`}
             </li>
-            <li className="flex items-center gap-1 whitespace-nowrap">
+            <li className="flex items-center gap-1 border border-blue-700 px-2 py-1 rounded-xl whitespace-nowrap">
               <FaBath className="text-md" />
               {listingDetails.bathrooms > 1
                 ? `${listingDetails.bathrooms} bathrooms`
                 : `${listingDetails.bathrooms} bathroom`}
             </li>
-            <li className="flex items-center gap-1 whitespace-nowrap">
+            <li className="flex items-center gap-1 border border-blue-700 px-2 py-1 rounded-xl whitespace-nowrap">
               <FaParking className="text-md" />
               {listingDetails.parking ? `Parking spot` : `No Parking`}
             </li>
-            <li className="flex items-center gap-1 whitespace-nowrap">
+            <li className="flex items-center gap-1 border border-blue-700 px-2 py-1 rounded-xl whitespace-nowrap">
               <FaChair className="text-md" />
               {listingDetails.furnished ? `Furnished` : `Unfurnished`}
             </li>
