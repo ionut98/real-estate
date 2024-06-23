@@ -10,8 +10,8 @@ import { useState } from 'react';
 import { app } from '../firebase';
 import { useNavigate } from 'react-router-dom';
 
-const RENT_TYPE = 'rent';
-const SELL_TYPE = 'sell';
+export const RENT_TYPE = 'rent';
+export const SELL_TYPE = 'sell';
 
 const INITIAL_FORM_DATA = {
   imageUrls: [],
