@@ -5,6 +5,7 @@ import SwiperCore from 'swiper';
 import { Navigation } from 'swiper/modules';
 
 import 'swiper/css/bundle';
+import { FaShare } from 'react-icons/fa';
 
 export default function Listing() {
   SwiperCore.use([Navigation]);
@@ -13,6 +14,7 @@ export default function Listing() {
   const [listingDetails, setListingDetails] = useState(null);
   const [error, setError] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [copied, setCopied] = useState(false);
 
   useEffect(() => {
     getListingDetails();
@@ -39,6 +41,14 @@ export default function Listing() {
     }
   };
 
+  const handleClickShare = () => {
+    navigator.clipboard.writeText(window.location.href);
+    setCopied(true);
+    setTimeout(() => {
+      setCopied(false);
+    }, 2000);
+  };
+
   return (
     <main>
       {listingDetails && !loading && !error && (
@@ -51,9 +61,17 @@ export default function Listing() {
                   background: `url(${url}) center no-repeat`,
                   backgroundSize: 'cover',
                 }}
-              ></div>
+              />
             </SwiperSlide>
           ))}
+          <div className="fixed top-[12.5%] right-[1.5%] z-10 border rounded-full w-12 h-12 flex justify-center items-center bg-blue-50 cursor-pointer">
+            <FaShare className="text-gray-700" onClick={handleClickShare} />
+          </div>
+          {copied && (
+            <p className="fixed top-[22%] right-[1.5%] z-10 rounded-lg items-center bg-blue-50 p-2">
+              Copied!
+            </p>
+          )}
         </Swiper>
       )}
       {loading && (
