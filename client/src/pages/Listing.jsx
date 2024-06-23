@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 import {
   FaBath,
   FaBed,
@@ -12,16 +13,21 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 import SwiperCore from 'swiper';
 import { Navigation } from 'swiper/modules';
 import 'swiper/css/bundle';
+
 import { RENT_TYPE, SELL_TYPE } from './AddListing';
+import Contact from '../components/Contact';
 
 export default function Listing() {
   SwiperCore.use([Navigation]);
+
   const { listingId } = useParams();
+  const { currentUser: user } = useSelector((state) => state.user);
 
   const [listingDetails, setListingDetails] = useState(null);
   const [error, setError] = useState(false);
   const [loading, setLoading] = useState(false);
   const [copied, setCopied] = useState(false);
+  const [contact, setContact] = useState(false);
 
   useEffect(() => {
     getListingDetails();
@@ -54,6 +60,13 @@ export default function Listing() {
     setTimeout(() => {
       setCopied(false);
     }, 2000);
+  };
+
+  const handleClickContact = () => {
+    if (!contact) {
+      setContact(true);
+    } else {
+    }
   };
 
   return (
@@ -158,6 +171,15 @@ export default function Listing() {
               {listingDetails.furnished ? `Furnished` : `Unfurnished`}
             </li>
           </ul>
+          {user && listingDetails.userRef !== user?._id && !contact && (
+            <button
+              onClick={handleClickContact}
+              className="bg-gray-700 text-blue-50 rounded-lg p-2 mt-4 uppercase hover:opacity-80"
+            >
+              Contact landlord
+            </button>
+          )}
+          {contact && <Contact listing={listingDetails} />}
         </div>
       )}
     </main>

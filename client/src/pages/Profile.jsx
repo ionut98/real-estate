@@ -37,7 +37,7 @@ export default function Profile() {
   const [updatedSuccessfully, setUpdatedSuccessfully] = useState(false);
 
   const [showListingsError, setShowListingsError] = useState(false);
-  const [userListings, setUserListings] = useState([]);
+  const [userListings, setUserListings] = useState(null);
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -275,14 +275,14 @@ export default function Profile() {
         />
         <button
           disabled={isLoading}
-          className="bg-blue-700 rounded-lg p-2 my-2 text-blue-50 font-semibold uppercase hover:opacity-85 disabled:opacity-65"
+          className="bg-blue-700 rounded-lg p-2 my-2 text-blue-50 uppercase hover:opacity-85 disabled:opacity-65"
         >
           {isLoading ? 'Loading...' : 'Update'}
         </button>
         <button
           disabled={isLoading}
           onClick={handleAddListing}
-          className="bg-gray-700 rounded-lg p-2 text-blue-50 font-semibold uppercase hover:opacity-85 disabled:opacity-65"
+          className="bg-gray-700 rounded-lg p-2 text-blue-50 uppercase hover:opacity-85 disabled:opacity-65"
         >
           Add Listing
         </button>
@@ -314,47 +314,51 @@ export default function Profile() {
       {showListingsError && (
         <p className="text-red-700 mt-4 text-center">Error showing listings!</p>
       )}
-      {userListings.length > 0 && (
-        <div className="flex flex-col gap-2 my-4">
-          <h1 className="text-center text-2xl font-semibold my-2 text-gray-700">
-            My Listings
-          </h1>
-          {userListings.map((listing) => (
-            <div
-              key={listing._id}
-              className="flex gap-4 border border-gray-300 rounded-lg bg-white items-center p-2"
-            >
-              <img
-                src={listing.imageUrls[0]}
-                alt="listing-image"
-                referrerPolicy="no-referrer"
-                className="rounded-lg h-24 w-32 object-cover cursor-pointer"
-                onClick={() => handleClickListing(listing._id)}
-              />
-              <p
-                onClick={() => handleClickListing(listing._id)}
-                className="text-sm text-gray-700 font-semibold truncate flex-1 cursor-pointer"
+      {userListings !== null ? (
+        userListings.length > 0 ? (
+          <div className="flex flex-col gap-2 my-4">
+            <h1 className="text-center text-2xl font-semibold my-2 text-gray-700">
+              My Listings
+            </h1>
+            {userListings.map((listing) => (
+              <div
+                key={listing._id}
+                className="flex gap-4 border border-gray-300 rounded-lg bg-white items-center p-2"
               >
-                {listing.name}
-              </p>
-              <div className="flex flex-col gap-2">
-                <button
-                  onClick={() => handleDeleteListing(listing._id)}
-                  className="p-2 uppercase border rounded-lg border-red-700 text-red-700 hover:shadow-md"
+                <img
+                  src={listing.imageUrls[0]}
+                  alt="listing-image"
+                  referrerPolicy="no-referrer"
+                  className="rounded-lg h-24 w-32 object-cover cursor-pointer"
+                  onClick={() => handleClickListing(listing._id)}
+                />
+                <p
+                  onClick={() => handleClickListing(listing._id)}
+                  className="text-sm text-gray-700 font-semibold truncate flex-1 cursor-pointer"
                 >
-                  Delete
-                </button>
-                <button
-                  onClick={() => handleEditListing(listing._id)}
-                  className="p-2 uppercase border rounded-lg border-blue-700 text-blue-700 hover:shadow-md"
-                >
-                  Edit
-                </button>
+                  {listing.name}
+                </p>
+                <div className="flex flex-col gap-2">
+                  <button
+                    onClick={() => handleDeleteListing(listing._id)}
+                    className="p-2 uppercase border rounded-lg border-red-700 text-red-700 hover:shadow-md"
+                  >
+                    Delete
+                  </button>
+                  <button
+                    onClick={() => handleEditListing(listing._id)}
+                    className="p-2 uppercase border rounded-lg border-blue-700 text-blue-700 hover:shadow-md"
+                  >
+                    Edit
+                  </button>
+                </div>
               </div>
-            </div>
-          ))}
-        </div>
-      )}
+            ))}
+          </div>
+        ) : (
+          <p className="text-center text-gray-700 my-4">No listings found!</p>
+        )
+      ) : null}
     </div>
   );
 }
