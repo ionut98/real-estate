@@ -138,10 +138,12 @@ export default function Listing() {
             {listingDetails.offer && (
               <p className="border bg-red-700 w-full max-w-[200px] text-blue-50 text-center p-1 rounded-lg">
                 -
-                {((+listingDetails.regularPrice -
-                  +listingDetails.discountedPrice) /
-                  +listingDetails.regularPrice) *
-                  100}
+                {Math.floor(
+                  ((+listingDetails.regularPrice -
+                    +listingDetails.discountedPrice) /
+                    +listingDetails.regularPrice) *
+                    100
+                )}
                 %
               </p>
             )}
