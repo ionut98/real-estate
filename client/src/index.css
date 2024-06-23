@@ -2,6 +2,10 @@
 @tailwind components;
 @tailwind utilities;
 
+:root {
+  --swiper-navigation-color: #eff6ff;
+}
+
 body {
   background-color: #1d4fd821;
 }

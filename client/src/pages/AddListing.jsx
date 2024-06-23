@@ -140,7 +140,7 @@ export default function AddListing() {
       return;
     }
 
-    if (formData.regularPrice <= formData.discountedPrice) {
+    if (+formData.regularPrice <= +formData.discountedPrice) {
       setError('Discounted price must be smaller than regular price!');
       return;
     }
