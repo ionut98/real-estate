@@ -10,8 +10,6 @@ export default function Header() {
   const [searchTerm, setSearchTerm] = useState('');
   const navigate = useNavigate();
 
-  console.log(user, '<=== USER');
-
   const handleSearchChange = (event) => {
     setSearchTerm(event.target.value);
   };

@@ -12,7 +12,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { useEffect } from 'react';
 
 const RENT_TYPE = 'rent';
-const SELL_TYPE = 'sell';
+const SELL_TYPE = 'sale';
 
 const INITIAL_FORM_DATA = {
   imageUrls: [],
@@ -240,7 +240,7 @@ export default function AddListing() {
             <div className="flex gap-2">
               <input
                 type="checkbox"
-                id="sell"
+                id="sale"
                 className="w-5 cursor-pointer"
                 onChange={handleChangeFormData}
                 checked={formData.type === SELL_TYPE}

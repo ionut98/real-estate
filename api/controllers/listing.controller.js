@@ -16,30 +16,30 @@ export const get = async (req, res, next) => {
 };
 
 export const getListings = async (req, res, next) => {
-  console.log("AICI IN GET LISTINGS");
+  console.log("AICI IN GET LISTINGS", req.query);
 
   try {
     const limit = parseInt(req.query.limit) || 9;
     const startIndex = parseInt(req.query.startIndex) || 0;
 
-    let offer = req.query.offer;
+    let offer = req.query.offer === "true" ? true : false;
     if (offer === undefined || offer === false) {
       offer = { $in: [false, true] };
     }
 
-    let furnished = req.query.furnished;
+    let furnished = req.query.furnished === "true" ? true : false;
     if (furnished === undefined || furnished === false) {
       furnished = { $in: [false, true] };
     }
 
-    let parking = req.query.parking;
+    let parking = req.query.parking === "true" ? true : false;
     if (parking === undefined || parking === false) {
       parking = { $in: [false, true] };
     }
 
     let type = req.query.type;
     if (type === undefined || type === "all") {
-      type = { $in: ["sell", "rent"] };
+      type = { $in: ["sale", "rent"] };
     }
 
     const searchTerm = req.query.searchTerm || "";
@@ -58,6 +58,8 @@ export const getListings = async (req, res, next) => {
       parking,
       type,
     };
+
+    console.log(searchConfig, "SEARCH CONFIG");
 
     const listings = await Listing.find(searchConfig)
       .sort({
