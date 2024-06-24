@@ -73,11 +73,9 @@ export default function Profile() {
         setFileUploadError(false);
         const progress =
           (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-        console.log('Upload is ' + progress + '% done');
         setFileUploadProgress(Math.round(progress));
       },
       (error) => {
-        console.log(error, '<===== error la imagine upload');
         setFileUploadError(true);
       },
       async () => {
@@ -116,8 +114,6 @@ export default function Profile() {
         dispatch(updateFailure(data.message));
         return;
       }
-
-      console.log(data, '<=== DACA E OK INTRA AICI CU DATA');
 
       dispatch(updateSuccess(data));
       setUpdatedSuccessfully(true);
@@ -200,7 +196,6 @@ export default function Profile() {
 
       const data = await response.json();
       if (data.success === false) {
-        console.log(data.message);
         return;
       }
 

@@ -5,7 +5,6 @@ import jwt from "jsonwebtoken";
 import { generateRandomString } from "../utils/utils.js";
 
 export const signup = async (req, res, next) => {
-  console.log(req.body);
   const { email, password, username } = req.body;
 
   const hashedPassword = await bcryptjs.hash(password, 10);
@@ -29,8 +28,6 @@ export const login = async (req, res, next) => {
     if (!foundUser) {
       return next(errorHandler(404, "User not found!"));
     }
-
-    console.log(foundUser);
 
     const isValidPassword = bcryptjs.compareSync(password, foundUser.password);
     if (!isValidPassword) {

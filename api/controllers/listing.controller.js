@@ -16,8 +16,6 @@ export const get = async (req, res, next) => {
 };
 
 export const getListings = async (req, res, next) => {
-  console.log("AICI IN GET LISTINGS", req.query);
-
   try {
     const limit = parseInt(req.query.limit) || 9;
     const startIndex = parseInt(req.query.startIndex) || 0;
@@ -59,8 +57,6 @@ export const getListings = async (req, res, next) => {
       parking,
       type,
     };
-
-    console.log(searchConfig, "SEARCH CONFIG");
 
     const listings = await Listing.find(searchConfig)
       .sort({

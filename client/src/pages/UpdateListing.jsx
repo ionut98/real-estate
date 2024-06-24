@@ -96,8 +96,6 @@ export default function AddListing() {
     }
   };
 
-  console.log(formData, '<=== FD');
-
   const storeImage = async (file) => {
     return new Promise((resolve, reject) => {
       const storage = getStorage(app);
@@ -110,7 +108,6 @@ export default function AddListing() {
         (snapshot) => {
           const progress =
             (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-          console.log('Upload is ' + progress + '% done');
         },
         (error) => {
           reject(error);

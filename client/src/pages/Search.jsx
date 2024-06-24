@@ -61,10 +61,6 @@ export default function Search() {
     }
   };
 
-  useEffect(() => {
-    console.log(sidebarData, '<=== SIDEBAR DATA');
-  }, [sidebarData]);
-
   const handleSubmitSearch = (ev) => {
     ev.preventDefault();
 
@@ -115,13 +111,8 @@ export default function Search() {
     getFilteredData();
   }, [location.search]);
 
-  useEffect(() => {
-    console.log('<=== LISTINGS', listings);
-  }, [listings]);
-
   const getFilteredData = async () => {
     try {
-      console.log('AJUNGE AICI');
       setLoading(true);
 
       const urlParams = new URLSearchParams(location.search);

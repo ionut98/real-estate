@@ -5,8 +5,6 @@ import Listing from "../models/listing.model.js";
 import { errorHandler } from "../utils/error.js";
 
 export const updateUser = async (req, res, next) => {
-  console.log("AM AJUNS AICI!");
-
   if (req.user.id !== req.params.id) {
     return next(errorHandler(401, "You can only update your own account!"));
   }
@@ -38,8 +36,6 @@ export const updateUser = async (req, res, next) => {
 };
 
 export const deleteUser = async (req, res, next) => {
-  console.log("AM AJUNS AICI!");
-
   if (req.user.id !== req.params.id) {
     return next(errorHandler(401, "You can only delete your own account!"));
   }
@@ -71,8 +67,6 @@ export const getUserListings = async (req, res, next) => {
 export const getUser = async (req, res, next) => {
   try {
     const user = await User.findById(req.params.id);
-
-    console.log(user, "USER");
 
     if (!user) {
       return next(errorHandler(404, "User not found!"));
