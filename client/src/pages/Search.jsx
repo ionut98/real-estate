@@ -24,6 +24,7 @@ export default function Search() {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
   const [listings, setListings] = useState(null);
+  const [showMore, setShowMore] = useState(false);
 
   const handleChangeData = (ev) => {
     if (['all', 'sale', 'rent'].includes(ev.target.id)) {
@@ -133,11 +134,36 @@ export default function Search() {
         return;
       }
 
+      if (data.length > 8) {
+        setShowMore(true);
+      }
+
       setListings(data);
       setLoading(false);
     } catch (error) {
       setLoading(false);
     }
+  };
+
+  const handleShowMore = async () => {
+    const numberOfListings = listings.length;
+    const startIndex = numberOfListings;
+
+    const urlParams = new URLSearchParams(location.search);
+    urlParams.set('startIndex', startIndex);
+    const searchQuery = urlParams.toString();
+
+    const result = await fetch(`api/listing?${searchQuery}`);
+    const data = await result.json();
+    if (data.success === false) {
+      return;
+    }
+
+    if (data.length < 9) {
+      setShowMore(false);
+    }
+
+    setListings((prevListings) => [...prevListings, ...data]);
   };
 
   return (
@@ -270,6 +296,14 @@ export default function Search() {
                 <ListingCard key={listing._id} listing={listing} />
               ))}
           </div>
+          {showMore && (
+            <button
+              className="text-blue-700 px-7 py-2 w-full text-center mx-auto"
+              onClick={handleShowMore}
+            >
+              Show more
+            </button>
+          )}
         </div>
       </div>
     </main>
