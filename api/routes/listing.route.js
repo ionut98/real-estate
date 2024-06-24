@@ -10,7 +10,7 @@ import { verifyToken } from "../utils/verifyUser.js";
 
 const listingRouter = Router();
 
-listingRouter.get("/", verifyToken, getListings);
+listingRouter.get("/", getListings);
 listingRouter.get("/:id", get);
 listingRouter.post("/add", verifyToken, add);
 listingRouter.delete("/delete/:id", verifyToken, remove);
