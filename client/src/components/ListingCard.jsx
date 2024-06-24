@@ -12,7 +12,7 @@ export default function ListingCard({ listing }) {
   return (
     <div
       onClick={navigateToListing}
-      className="text-gray-700 cursor-pointer bg-gray-50 shadow-sm hover:shadow-lg transition-shadow duration-500 overflow-hidden rounded-lg w-full sm:w-[300px]"
+      className="text-gray-700 cursor-pointer bg-gray-50 shadow-sm hover:shadow-lg transition-shadow duration-500 overflow-hidden rounded-lg w-full sm:w-[304px]"
     >
       <img
         src={listing.imageUrls[0]}
