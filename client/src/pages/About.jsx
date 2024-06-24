@@ -2,7 +2,7 @@ import React from 'react';
 
 export default function About() {
   return (
-    <main className="py-20 px-3 max-w-6xl mx-auto">
+    <main className="pt-14 px-4 max-w-6xl mx-auto">
       <h1 className="text-3xl font-bold mb-4 text-gray-700">
         About Realm Estate
       </h1>
